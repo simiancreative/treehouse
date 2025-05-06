@@ -15,7 +15,7 @@ Local development often means starting multiple services, remembering which flag
 * 🧠 **One config** to define core and optional services
 * 🕹 **Simple CLI commands** to start everything or just what you need
 * 🐾 **Single Process Mode (SPM)** for quick experimentation
-* 🌿 **Interactive TUI (coming soon!)** for assembling your perfect dev environment
+* 🌿 **Interactive TUI** for monitoring and controlling your services
 * 🐵 **No monkey business** — just clean, maintainable workflows
 
 ---
@@ -27,29 +27,41 @@ Local development often means starting multiple services, remembering which flag
 ```bash
 git clone https://github.com/simiancreative/treehouse.git
 cd treehouse
-go run ./cmd/treehouse start
+go run main.go start
 ```
 
 ---
 
-## 🌳 Project Structure
+## 🌳 Configuration
 
 ```yaml
-configs/treehouse.yaml:
-  core_services:
-    ui-server:
-      command: "ui-server --env development"
-      modes:
-        with-auth: "ui-server --env with-auth"
-    spa-ui:
-      command: "pnpm --filter spa-ui dev"
-    temporal:
-      command: "temporal dev-server start"
-  optional_services:
-    oidc-server:
-      command: "oidc-server --port 3000"
-    codec-server:
-      command: "codec-server --port 5000"
+# configs/treehouse.yaml
+core_services:
+  ui-server:
+    command: "ui-server --env development"
+    modes:
+      with-auth: "ui-server --env with-auth"
+    env:
+      PORT: "3000"
+    health_check:
+      url: "http://localhost:3000/health"
+      codes: [200]
+      interval_seconds: 2
+      timeout_seconds: 30
+  spa-ui:
+    command: "pnpm --filter spa-ui dev"
+    health_check:
+      url: "http://localhost:5173"
+      codes: [200]
+optional_services:
+  oidc-server:
+    command: "oidc-server --port 3000"
+    health_check:
+      url: "http://localhost:3000/health"
+      codes: [200]
+global_env:
+  NODE_ENV: "development"
+  DEBUG: "true"
 ```
 
 No Procfiles. No magic. Just YAML.
@@ -61,26 +73,26 @@ No Procfiles. No magic. Just YAML.
 ### Start your full tree:
 
 ```bash
-treehouse start
+treehouse start [--config-dir DIR] [--mode MODE] [--focus SERVICE] [--mute SERVICE]
 ```
 
-Starts all `core_services` defined in the config.
+Starts all `core_services` defined in the config with a full TUI interface.
 
 ### Climb one branch (SPM):
 
 ```bash
-treehouse spm --svc ui-server --mode with-auth
+treehouse spm SERVICE_NAME [--config-dir DIR] [--mode MODE]
 ```
 
-Runs a single service, optionally with a mode override.
+Runs a single service without TUI, with health checks only for the specified service.
 
-### Customize your jungle (coming soon):
+### Compose your jungle:
 
 ```bash
-treehouse configure
+treehouse compose [--config-dir DIR]
 ```
 
-Launches an interactive TUI to pick which services to start.
+Launches an interactive TUI to select which services to start and their modes.
 
 ---
 
@@ -92,7 +104,7 @@ At Simian Creative, we believe that tools should get out of your way — not add
 * Be **flexible, not magical**
 * Support **real workflows**, not toy demos
 
-You don’t need Kubernetes on your laptop. You just need a treehouse. 🛖
+You don't need Kubernetes on your laptop. You just need a treehouse. 🛖
 
 ---
 
