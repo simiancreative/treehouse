@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
-	"github.com/simiancreative/treehouse"
 	"os"
+
+	"github.com/simiancreative/treehouse/core"
+	"github.com/spf13/cobra"
 )
 
 func main() {
-	var coreService treehouse.Service = &treehouse.CoreService{}
+	var coreService core.Service = &core.DefaultService{}
 
 	var rootCmd = &cobra.Command{
 		Use:   "treehouse",

@@ -1,12 +1,12 @@
-package treehouse
+package core
 
 type Service interface {
 	Start() error
 }
 
-type CoreService struct{}
+type DefaultService struct{}
 
-func (c *CoreService) Start() error {
+func (c *DefaultService) Start() error {
 	// Placeholder for starting core services logic
 	return nil
 }
