@@ -35,7 +35,7 @@ go run ./cmd/treehouse start
 ## 🌳 Project Structure
 
 ```yaml
-configs/devctl.yaml:
+configs/treehouse.yaml:
   core_services:
     ui-server:
       command: "ui-server --env development"

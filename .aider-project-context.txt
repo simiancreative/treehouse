@@ -20,7 +20,7 @@ It replaces the use of ad hoc Vite plugins or Procfiles with a single YAML confi
 
 ---
 
-## 🧾 YAML Config Schema (configs/devctl.yaml)
+## 🧾 YAML Config Schema (configs/treehouse.yaml)
 
 ```yaml
 core_services:
