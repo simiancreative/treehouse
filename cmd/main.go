@@ -2,27 +2,46 @@ package main
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"os"
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: treehouse <command> [options]")
-		return
+	var rootCmd = &cobra.Command{
+		Use:   "treehouse",
+		Short: "Treehouse is a CLI tool for orchestrating local development services",
 	}
 
-	switch os.Args[1] {
-	case "start":
-		fmt.Println("Starting core services...")
-		// Placeholder for starting core services logic
-	case "spm":
-		fmt.Println("Starting single process mode...")
-		// Placeholder for starting a single service logic
-	case "configure":
-		fmt.Println("Configuring services...")
-		// Placeholder for configuring services logic
-	default:
-		fmt.Println("Unknown command:", os.Args[1])
-		fmt.Println("Available commands: start, spm, configure")
+	var startCmd = &cobra.Command{
+		Use:   "start",
+		Short: "Start all core services",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Starting core services...")
+			// Placeholder for starting core services logic
+		},
+	}
+
+	var spmCmd = &cobra.Command{
+		Use:   "spm",
+		Short: "Start a single process mode",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Starting single process mode...")
+			// Placeholder for starting a single service logic
+		},
+	}
+
+	var configureCmd = &cobra.Command{
+		Use:   "configure",
+		Short: "Configure services",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("Configuring services...")
+			// Placeholder for configuring services logic
+		},
+	}
+
+	rootCmd.AddCommand(startCmd, spmCmd, configureCmd)
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
 }
