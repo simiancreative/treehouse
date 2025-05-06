@@ -3,10 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/simiancreative/treehouse"
 	"os"
 )
 
 func main() {
+	var coreService treehouse.Service = &treehouse.CoreService{}
+
 	var rootCmd = &cobra.Command{
 		Use:   "treehouse",
 		Short: "Treehouse is a CLI tool for orchestrating local development services",
@@ -16,8 +19,11 @@ func main() {
 		Use:   "start",
 		Short: "Start all core services",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("Starting core services...")
-			// Placeholder for starting core services logic
+			if err := coreService.Start(); err != nil {
+				fmt.Println("Error starting core services:", err)
+			} else {
+				fmt.Println("Core services started successfully.")
+			}
 		},
 	}
 
